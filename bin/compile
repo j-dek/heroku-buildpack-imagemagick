@@ -114,7 +114,7 @@ fi
 if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
   echo "-----> Building ImageMagick"
   # Install ImageMagick
-  curl https://github.com/ImageMagick/ImageMagick/archive/refs/tags/${IMAGE_MAGICK_VERSION}.tar.gz -o imagemagick.tar.gz
+  curl -L https://github.com/ImageMagick/ImageMagick/archive/refs/tags/${IMAGE_MAGICK_VERSION}.tar.gz -o imagemagick.tar.gz
   tar -xzvf imagemagick.tar.gz
   cd imagemagick
   export CPPFLAGS="-I$IMAGE_MAGICK_INSTALL_DIR/include"
