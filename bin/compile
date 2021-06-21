@@ -4,22 +4,22 @@ indent() {
   sed -u 's/^/       /'
 }
 
-echo "-----> Install ImageMagick with WebP, AOM, and HEIF support"
+echo "-----> Install ImageMagick with WebP and HEIF support"
 
 BUILD_DIR=$1
 CACHE_DIR=$2
 VENDOR_DIR="$BUILD_DIR/vendor"
 IMAGE_MAGICK_INSTALL_DIR="$VENDOR_DIR/imagemagick"
 HEIF_INSTALL_DIR="$VENDOR_DIR/heif"
-AOM_INSTALL_DIR="$VENDOR_DIR/aom"
+# AOM_INSTALL_DIR="$VENDOR_DIR/aom"
 WEBP_INSTALL_DIR="$VENDOR_DIR/webp"
 IMAGE_MAGICK_VERSION=7.0.11-12
 HEIF_VERSION=1.11.0
-AOM_VERSION=3.0.0
+# AOM_VERSION=3.0.0
 WEBP_VERSION=1.2.0
 IMAGE_MAGICK_CACHE_FILE="$CACHE_DIR/imagemagick-$IMAGE_MAGICK_VERSION.tar.gz"
 HEIF_CACHE_FILE="$CACHE_DIR/heif-$HEIF_VERSION.tar.gz"
-AOM_CACHE_FILE="$CACHE_DIR/aom-$AOM_VERSION.tar.gz"
+# AOM_CACHE_FILE="$CACHE_DIR/aom-$AOM_VERSION.tar.gz"
 WEBP_CACHE_FILE="$CACHE_DIR/webp-$WEBP_VERSION.tar.gz"
 
 if [ ! -d $CACHE_DIR ]; then
@@ -30,31 +30,31 @@ if [ ! -d $VENDOR_DIR ]; then
   mkdir -p $VENDOR_DIR
 fi
 
-# if [ ! -f $WEBP_CACHE_FILE ]; then
-#   echo "-----> Building WebP"
-#   # Install WebP
-#   git clone https://chromium.googlesource.com/webm/libwebp
-#   cd libwebp
-#   git checkout v${WEBP_VERSION}
-#   export CPPFLAGS="-I$WEBP_INSTALL_DIR/include"
-#   export LDFLAGS="-L$WEBP_INSTALL_DIR/lib"
-#   ./autogen.sh && ./configure --enable-shared --enable-libwebpdecoder --enable-libwebpdemux --enable-libwebpmux --enable-static=no --prefix=$WEBP_INSTALL_DIR
-#   make && make install
-#   ldconfig /usr/local/lib
-#   cd ..
-#   rm -rf libwebp
+if [ ! -f $WEBP_CACHE_FILE ]; then
+  echo "-----> Building WebP"
+  # Install WebP
+  git clone https://chromium.googlesource.com/webm/libwebp
+  cd libwebp
+  git checkout v${WEBP_VERSION}
+  export CPPFLAGS="-I$WEBP_INSTALL_DIR/include"
+  export LDFLAGS="-L$WEBP_INSTALL_DIR/lib"
+  ./autogen.sh && ./configure --enable-shared --enable-libwebpdecoder --enable-libwebpdemux --enable-libwebpmux --enable-static=no --prefix=$WEBP_INSTALL_DIR
+  make && make install
+  ldconfig /usr/local/lib
+  cd ..
+  rm -rf libwebp
 
-#   # cache for future deploys
-#   echo "-----> Caching WebP installation"
-#   cd $VENDOR_DIR
-#   REL_INSTALL_DIR="webp"
-#   tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
-#   mv $REL_INSTALL_DIR.tar.gz $WEBP_CACHE_FILE
-# else
-#   # cache exists, extract it
-#   echo "-----> Extracting WebP $WEBP_CACHE_FILE => $VENDOR_DIR"
-#   tar xzf $WEBP_CACHE_FILE -C $VENDOR_DIR
-# fi
+  # cache for future deploys
+  echo "-----> Caching WebP installation"
+  cd $VENDOR_DIR
+  REL_INSTALL_DIR="webp"
+  tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
+  mv $REL_INSTALL_DIR.tar.gz $WEBP_CACHE_FILE
+else
+  # cache exists, extract it
+  echo "-----> Extracting WebP $WEBP_CACHE_FILE => $VENDOR_DIR"
+  tar xzf $WEBP_CACHE_FILE -C $VENDOR_DIR
+fi
 
 # if [ ! -f $AOM_CACHE_FILE ]; then
 #   echo "-----> Building AOM"
@@ -84,32 +84,32 @@ fi
 #   tar xzf $AOM_CACHE_FILE -C $VENDOR_DIR
 # fi
 
-# if [ ! -f $HEIF_CACHE_FILE ]; then
-#   echo "-----> Building HEIF"
-#   # Install HEIF
-#   curl -L https://github.com/strukturag/libheif/releases/download/v${HEIF_VERSION}/libheif-${HEIF_VERSION}.tar.gz -o libheif.tar.gz
-#   tar -xzvf libheif.tar.gz
-#   cd libheif-${HEIF_VERSION}
-#   export CPPFLAGS="-I$HEIF_INSTALL_DIR/include"
-#   export LDFLAGS="-L$HEIF_INSTALL_DIR/lib"
-#   ./autogen.sh && ./configure --prefix=$HEIF_INSTALL_DIR
-#   make && make install
-#   cd ..
-#   ldconfig /usr/local/lib
-#   rm -rf libheif-${HEIF_VERSION}
-#   rm libheif.tar.gz
+if [ ! -f $HEIF_CACHE_FILE ]; then
+  echo "-----> Building HEIF"
+  # Install HEIF
+  curl -L https://github.com/strukturag/libheif/releases/download/v${HEIF_VERSION}/libheif-${HEIF_VERSION}.tar.gz -o libheif.tar.gz
+  tar -xzvf libheif.tar.gz
+  cd libheif-${HEIF_VERSION}
+  export CPPFLAGS="-I$HEIF_INSTALL_DIR/include"
+  export LDFLAGS="-L$HEIF_INSTALL_DIR/lib"
+  ./autogen.sh && ./configure --prefix=$HEIF_INSTALL_DIR
+  make && make install
+  cd ..
+  ldconfig /usr/local/lib
+  rm -rf libheif-${HEIF_VERSION}
+  rm libheif.tar.gz
 
-#   # cache for future deploys
-#   echo "-----> Caching HEIF installation"
-#   cd $VENDOR_DIR
-#   REL_INSTALL_DIR="heif"
-#   tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
-#   mv $REL_INSTALL_DIR.tar.gz $HEIF_CACHE_FILE
-# else
-#   # cache exists, extract it
-#   echo "-----> Extracting HEIF $HEIF_CACHE_FILE => $VENDOR_DIR"
-#   tar xzf $HEIF_CACHE_FILE -C $VENDOR_DIR
-# fi
+  # cache for future deploys
+  echo "-----> Caching HEIF installation"
+  cd $VENDOR_DIR
+  REL_INSTALL_DIR="heif"
+  tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
+  mv $REL_INSTALL_DIR.tar.gz $HEIF_CACHE_FILE
+else
+  # cache exists, extract it
+  echo "-----> Extracting HEIF $HEIF_CACHE_FILE => $VENDOR_DIR"
+  tar xzf $HEIF_CACHE_FILE -C $VENDOR_DIR
+fi
 
 if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
   echo "-----> Building ImageMagick"
