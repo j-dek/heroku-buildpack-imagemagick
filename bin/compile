@@ -115,7 +115,7 @@ if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
   echo "-----> Building ImageMagick"
   # Install ImageMagick
   wget https://github.com/ImageMagick/ImageMagick/archive/refs/tags/${IMAGE_MAGICK_VERSION}.tar.gz -P $BUILD_DIR -O $BUILD_DIR/imagemagick.tar.gz | indent
-  tar -xvf $BUILD_DIR/imagemagick.tar.gz | indent
+  tar -xvf $BUILD_DIR/imagemagick.tar.gz --directory $BUILD_DIR | indent
   cd $BUILD_DIR/ImageMagick-${IMAGE_MAGICK_VERSION}
 
   if [ ! -d $BUILD_DIR/ImageMagick-${IMAGE_MAGICK_VERSION} ]; then
