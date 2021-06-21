@@ -30,31 +30,31 @@ if [ ! -d $VENDOR_DIR ]; then
   mkdir -p $VENDOR_DIR
 fi
 
-if [ ! -f $WEBP_CACHE_FILE ]; then
-  echo "-----> Building WebP"
-  # Install WebP
-  git clone https://chromium.googlesource.com/webm/libwebp
-  cd libwebp
-  git checkout v${WEBP_VERSION}
-  export CPPFLAGS="-I$WEBP_INSTALL_DIR/include"
-  export LDFLAGS="-L$WEBP_INSTALL_DIR/lib"
-  ./autogen.sh && ./configure --enable-shared --enable-libwebpdecoder --enable-libwebpdemux --enable-libwebpmux --enable-static=no --prefix=$WEBP_INSTALL_DIR
-  make && make install
-  ldconfig /usr/local/lib
-  cd ..
-  rm -rf libwebp
+# if [ ! -f $WEBP_CACHE_FILE ]; then
+#   echo "-----> Building WebP"
+#   # Install WebP
+#   git clone https://chromium.googlesource.com/webm/libwebp
+#   cd libwebp
+#   git checkout v${WEBP_VERSION}
+#   export CPPFLAGS="-I$WEBP_INSTALL_DIR/include"
+#   export LDFLAGS="-L$WEBP_INSTALL_DIR/lib"
+#   ./autogen.sh && ./configure --enable-shared --enable-libwebpdecoder --enable-libwebpdemux --enable-libwebpmux --enable-static=no --prefix=$WEBP_INSTALL_DIR
+#   make && make install
+#   ldconfig /usr/local/lib
+#   cd ..
+#   rm -rf libwebp
 
-  # cache for future deploys
-  echo "-----> Caching WebP installation"
-  cd $VENDOR_DIR
-  REL_INSTALL_DIR="webp"
-  tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
-  mv $REL_INSTALL_DIR.tar.gz $WEBP_CACHE_FILE
-else
-  # cache exists, extract it
-  echo "-----> Extracting WebP $WEBP_CACHE_FILE => $VENDOR_DIR"
-  tar xzf $WEBP_CACHE_FILE -C $VENDOR_DIR
-fi
+#   # cache for future deploys
+#   echo "-----> Caching WebP installation"
+#   cd $VENDOR_DIR
+#   REL_INSTALL_DIR="webp"
+#   tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
+#   mv $REL_INSTALL_DIR.tar.gz $WEBP_CACHE_FILE
+# else
+#   # cache exists, extract it
+#   echo "-----> Extracting WebP $WEBP_CACHE_FILE => $VENDOR_DIR"
+#   tar xzf $WEBP_CACHE_FILE -C $VENDOR_DIR
+# fi
 
 # if [ ! -f $AOM_CACHE_FILE ]; then
 #   echo "-----> Building AOM"
@@ -84,46 +84,46 @@ fi
 #   tar xzf $AOM_CACHE_FILE -C $VENDOR_DIR
 # fi
 
-if [ ! -f $HEIF_CACHE_FILE ]; then
-  echo "-----> Building HEIF"
-  # Install HEIF
-  curl -L https://github.com/strukturag/libheif/releases/download/v${HEIF_VERSION}/libheif-${HEIF_VERSION}.tar.gz -o libheif.tar.gz
-  tar -xzvf libheif.tar.gz
-  cd libheif-${HEIF_VERSION}
-  export CPPFLAGS="-I$HEIF_INSTALL_DIR/include"
-  export LDFLAGS="-L$HEIF_INSTALL_DIR/lib"
-  ./autogen.sh && ./configure --prefix=$HEIF_INSTALL_DIR
-  make && make install
-  cd ..
-  ldconfig /usr/local/lib
-  rm -rf libheif-${HEIF_VERSION}
-  rm libheif.tar.gz
+# if [ ! -f $HEIF_CACHE_FILE ]; then
+#   echo "-----> Building HEIF"
+#   # Install HEIF
+#   curl -L https://github.com/strukturag/libheif/releases/download/v${HEIF_VERSION}/libheif-${HEIF_VERSION}.tar.gz -o libheif.tar.gz
+#   tar -xzvf libheif.tar.gz
+#   cd libheif-${HEIF_VERSION}
+#   export CPPFLAGS="-I$HEIF_INSTALL_DIR/include"
+#   export LDFLAGS="-L$HEIF_INSTALL_DIR/lib"
+#   ./autogen.sh && ./configure --prefix=$HEIF_INSTALL_DIR
+#   make && make install
+#   cd ..
+#   ldconfig /usr/local/lib
+#   rm -rf libheif-${HEIF_VERSION}
+#   rm libheif.tar.gz
 
-  # cache for future deploys
-  echo "-----> Caching HEIF installation"
-  cd $VENDOR_DIR
-  REL_INSTALL_DIR="heif"
-  tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
-  mv $REL_INSTALL_DIR.tar.gz $HEIF_CACHE_FILE
-else
-  # cache exists, extract it
-  echo "-----> Extracting HEIF $HEIF_CACHE_FILE => $VENDOR_DIR"
-  tar xzf $HEIF_CACHE_FILE -C $VENDOR_DIR
-fi
+#   # cache for future deploys
+#   echo "-----> Caching HEIF installation"
+#   cd $VENDOR_DIR
+#   REL_INSTALL_DIR="heif"
+#   tar czf $REL_INSTALL_DIR.tar.gz $REL_INSTALL_DIR
+#   mv $REL_INSTALL_DIR.tar.gz $HEIF_CACHE_FILE
+# else
+#   # cache exists, extract it
+#   echo "-----> Extracting HEIF $HEIF_CACHE_FILE => $VENDOR_DIR"
+#   tar xzf $HEIF_CACHE_FILE -C $VENDOR_DIR
+# fi
 
 if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
   echo "-----> Building ImageMagick"
   # Install ImageMagick
-  git clone https://github.com/ImageMagick/ImageMagick.git
-  cd ImageMagick
-  git checkout ${IM_VERSION}
+  curl https://github.com/ImageMagick/ImageMagick/archive/refs/tags/${IMAGE_MAGICK_VERSION}.tar.gz -o imagemagick.tar.gz
+  tar -xzvf imagemagick.tar.gz
+  cd imagemagick
   export CPPFLAGS="-I$IMAGE_MAGICK_INSTALL_DIR/include"
   export LDFLAGS="-L$IMAGE_MAGICK_INSTALL_DIR/lib"
   ./configure --without-magick-plus-plus --disable-docs --prefix=$IMAGE_MAGICK_INSTALL_DIR
   make && make install
   # ldconfig /usr/local/lib
   cd ..
-  rm -rf ImageMagick
+  rm -rf imagemagick
 
   # cache for future deploys
   echo "-----> Caching ImageMagick installation"
