@@ -138,6 +138,9 @@ if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
     exit 1;
   fi
 
+  # Copy delegate file
+  cp $IMAGE_MAGICK_INSTALL_DIR/etc/ImageMagick-7/delegates.xml $IMAGE_MAGICK_INSTALL_DIR/delegates.xml
+
   # cache for future deploys
   echo "-----> Caching ImageMagick installation"
   cd $VENDOR_DIR
