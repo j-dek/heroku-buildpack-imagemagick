@@ -114,9 +114,15 @@ fi
 if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
   echo "-----> Building ImageMagick"
   # Install ImageMagick
-  wget https://github.com/ImageMagick/ImageMagick/archive/refs/tags/${IMAGE_MAGICK_VERSION}.tar.gz -P $BUILD_DIR | indent
-  tar -xvf $BUILD_DIR/ImageMagick-${IMAGE_MAGICK_VERSION}.tar.gz | indent
+  wget https://github.com/ImageMagick/ImageMagick/archive/refs/tags/${IMAGE_MAGICK_VERSION}.tar.gz -P $BUILD_DIR -O imagemagick.tar.gz | indent
+  tar -xvf $BUILD_DIR/imagemagick.tar.gz | indent
   cd $BUILD_DIR/ImageMagick-${IMAGE_MAGICK_VERSION}
+
+  if [ ! -d $BUILD_DIR/ImageMagick-${IMAGE_MAGICK_VERSION} ]
+    echo "Error: Unable to download and extract ImageMagick" | indent
+    exit 1;
+  fi
+
   export CPPFLAGS="-I$IMAGE_MAGICK_INSTALL_DIR/include"
   export LDFLAGS="-L$IMAGE_MAGICK_INSTALL_DIR/lib"
   ./configure --without-magick-plus-plus --disable-docs --prefix=$IMAGE_MAGICK_INSTALL_DIR
@@ -124,6 +130,11 @@ if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
   # ldconfig /usr/local/lib
   cd ..
   rm -rf ImageMagick-${IMAGE_MAGICK_VERSION}
+
+  if [ ! -d $IMAGE_MAGICK_INSTALL_DIR ]
+    echo "Error: Unable to build ImageMagick" | indent
+    exit 1;
+  fi
 
   # cache for future deploys
   echo "-----> Caching ImageMagick installation"
