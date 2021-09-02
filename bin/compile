@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Remove cache between builds
+# heroku plugins:install heroku-builds --app app
+# heroku builds:cache:purge --confirm app --app app
+
 indent() {
   sed -u 's/^/       /'
 }
