@@ -8,19 +8,21 @@ echo "-----> Install ImageMagick with WebP and HEIF support"
 
 BUILD_DIR=$1
 CACHE_DIR=$2
+
 VENDOR_DIR="$BUILD_DIR/vendor"
 IMAGE_MAGICK_INSTALL_DIR="$VENDOR_DIR/imagemagick"
-HEIF_INSTALL_DIR="$VENDOR_DIR/heif"
+IMAGE_MAGICK_ACTUAL_INSTALL_PATH="$HOME/vendor/imagemagick"
+# HEIF_INSTALL_DIR="$VENDOR_DIR/heif"
 # AOM_INSTALL_DIR="$VENDOR_DIR/aom"
-WEBP_INSTALL_DIR="$VENDOR_DIR/webp"
+# WEBP_INSTALL_DIR="$VENDOR_DIR/webp"
 IMAGE_MAGICK_VERSION=7.0.11-12
-HEIF_VERSION=1.11.0
+# HEIF_VERSION=1.11.0
 # AOM_VERSION=3.0.0
-WEBP_VERSION=1.2.0
+# WEBP_VERSION=1.2.0
 IMAGE_MAGICK_CACHE_FILE="$CACHE_DIR/imagemagick-$IMAGE_MAGICK_VERSION.tar.gz"
-HEIF_CACHE_FILE="$CACHE_DIR/heif-$HEIF_VERSION.tar.gz"
+# HEIF_CACHE_FILE="$CACHE_DIR/heif-$HEIF_VERSION.tar.gz"
 # AOM_CACHE_FILE="$CACHE_DIR/aom-$AOM_VERSION.tar.gz"
-WEBP_CACHE_FILE="$CACHE_DIR/webp-$WEBP_VERSION.tar.gz"
+# WEBP_CACHE_FILE="$CACHE_DIR/webp-$WEBP_VERSION.tar.gz"
 
 if [ ! -d $CACHE_DIR ]; then
   mkdir -p $CACHE_DIR
@@ -154,12 +156,33 @@ else
   tar xzf $IMAGE_MAGICK_CACHE_FILE -C $VENDOR_DIR
 fi
 
+# Update Policy
+echo "-----> Updating ImageMagick policy.xml"
+read -r -d '' IMPOLICY <<'EOF'
+<policymap xmlns="">
+  <policy domain="resource" name="memory" value="2GiB"/>
+  <policy domain="resource" name="map" value="1GiB"/>
+  <policy domain="resource" name="width" value="20KP"/>
+  <policy domain="resource" name="height" value="20KP"/>
+  <policy domain="resource" name="area" value="256MB"/>
+  <policy domain="resource" name="disk" value="1GiB"/>
+  <policy domain="resource" name="thread" value="4"/>
+  <policy domain="resource" name="throttle" value="0"/>
+  <policy domain="delegate" rights="none" pattern="URL" />
+  <policy domain="delegate" rights="none" pattern="HTTPS" />
+  <policy domain="delegate" rights="none" pattern="HTTP" />
+  <policy domain="path" rights="none" pattern="@*"/>
+  <policy domain="cache" name="shared-secret" value="passphrase" stealth="true"/>
+</policymap>
+EOF
+
+echo "$IMPOLICY" > $IMAGE_MAGICK_ACTUAL_INSTALL_PATH/policy.xml
+
 # update PATH and LD_LIBRARY_PATH
 echo "-----> Updating environment variables"
 PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick.sh"
-ACTUAL_INSTALL_PATH="$HOME/vendor/imagemagick"
 mkdir -p $(dirname $PROFILE_PATH)
-echo "export PATH=$ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
-echo "export LD_LIBRARY_PATH=$ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH:/usr/local/lib" >> $PROFILE_PATH
-echo "export MAGICK_CONFIGURE_PATH=$ACTUAL_INSTALL_PATH" >> $PROFILE_PATH
+echo "export PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
+echo "export LD_LIBRARY_PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH:/usr/local/lib" >> $PROFILE_PATH
+echo "export MAGICK_CONFIGURE_PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH" >> $PROFILE_PATH
 echo "-----> Done updating environment variables. All set for ImageMagick."
