@@ -181,7 +181,7 @@ read -r -d '' IMPOLICY <<'EOF'
 </policymap>
 EOF
 
-echo "$IMPOLICY" > $IMAGE_MAGICK_INSTALL_DIR/etc/ImageMagick-7/policy.xml
+# echo "$IMPOLICY" > $IMAGE_MAGICK_INSTALL_DIR/etc/ImageMagick-7/policy.xml
 
 # update PATH and LD_LIBRARY_PATH
 echo "-----> Updating environment variables"
