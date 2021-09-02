@@ -145,7 +145,7 @@ if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
   fi
 
   # Copy delegate file
-  cp $IMAGE_MAGICK_INSTALL_DIR/etc/ImageMagick-7/delegates.xml $IMAGE_MAGICK_INSTALL_DIR/delegates.xml
+  # cp $IMAGE_MAGICK_INSTALL_DIR/etc/ImageMagick-7/delegates.xml $IMAGE_MAGICK_INSTALL_DIR/delegates.xml
 
   # cache for future deploys
   echo "-----> Caching ImageMagick installation"
@@ -180,7 +180,7 @@ read -r -d '' IMPOLICY <<'EOF'
 </policymap>
 EOF
 
-echo "$IMPOLICY" > $IMAGE_MAGICK_ACTUAL_INSTALL_PATH/policy.xml
+echo "$IMPOLICY" > $IMAGE_MAGICK_INSTALL_DIR/etc/ImageMagick-7/policy.xml
 
 # update PATH and LD_LIBRARY_PATH
 echo "-----> Updating environment variables"
@@ -188,5 +188,5 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo "export PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
 echo "export LD_LIBRARY_PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH:/usr/local/lib" >> $PROFILE_PATH
-echo "export MAGICK_CONFIGURE_PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH" >> $PROFILE_PATH
+echo "export MAGICK_CONFIGURE_PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/etc/ImageMagick-7" >> $PROFILE_PATH
 echo "-----> Done updating environment variables. All set for ImageMagick."
