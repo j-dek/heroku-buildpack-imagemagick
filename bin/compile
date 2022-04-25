@@ -133,7 +133,7 @@ if [ ! -f $IMAGE_MAGICK_CACHE_FILE ]; then
   export CPPFLAGS="-I$IMAGE_MAGICK_INSTALL_DIR/include -fPIC"
   export LDFLAGS="-L$IMAGE_MAGICK_INSTALL_DIR/lib -fPIC"
   # Remove pengo, it gives errors on compile and it isn't used right now.
-  ./configure --without-magick-plus-plus --with-pengo=no --disable-docs --prefix=$IMAGE_MAGICK_INSTALL_DIR
+  ./configure --without-magick-plus-plus --without-pango --disable-docs --prefix=$IMAGE_MAGICK_INSTALL_DIR
   make && make install
   # ldconfig /usr/local/lib
   cd ..
