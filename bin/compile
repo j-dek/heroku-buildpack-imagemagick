@@ -190,5 +190,5 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo "export PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/bin:\$PATH" >> $PROFILE_PATH
 echo "export LD_LIBRARY_PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/lib:\$LD_LIBRARY_PATH:/usr/local/lib" >> $PROFILE_PATH
-# echo "export MAGICK_CONFIGURE_PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/etc/ImageMagick-7" >> $PROFILE_PATH
+echo "export MAGICK_CONFIGURE_PATH=$IMAGE_MAGICK_ACTUAL_INSTALL_PATH/etc/ImageMagick-7" >> $PROFILE_PATH
 echo "-----> Done updating environment variables. All set for ImageMagick."
